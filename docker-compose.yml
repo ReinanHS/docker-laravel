@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: web.docker
+    volumes:
+      - ${APPLICATION}:/var/www
+    ports:
+      - "${NGINX_HOST_HTTP_PORT}:80"
+    links:
+      - app
+  app:
+    build:
+      context: ./
+      dockerfile: app.docker
+    volumes:
+      - ${APPLICATION}:/var/www
+    links:
+      - db
+    environment:
+      - DB_PORT=3306
+      - DB_HOST=db
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - default
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    links: 
+      - db:db
+    ports:
+      - ${PHPMYADMIN_PORT}:80
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
