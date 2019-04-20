@@ -41,11 +41,4 @@ Esta configuração contém:
     docker stop $(docker ps -a -q)
    ```
   
-  Para pegar o IP do seu contêiner use:
-  ´´´sh
-  docker-machine ip 
-  ´´´
-  ou
-  ´´´sh
-  ipconfig
-  ´´´
+  Para pegar o IP do seu contêiner use: docker-machine ip ou ipconfig
